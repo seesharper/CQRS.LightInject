@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CQRS.Command.Abstractions;
 
-namespace CQRS.Microsoft.Extensions.DependencyInjection.Tests
+namespace CQRS.LightInject.Tests
 {
     public class SampleCommandHandler : ICommandHandler<SampleCommand>
     {

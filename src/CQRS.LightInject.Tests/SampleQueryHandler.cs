@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CQRS.Query.Abstractions;
 
-namespace CQRS.Microsoft.Extensions.DependencyInjection.Tests
+namespace CQRS.LightInject.Tests
 {
     public class SampleQueryHandler : IQueryHandler<SampleQuery, SampleQueryResult>
     {

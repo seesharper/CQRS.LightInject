@@ -33,7 +33,16 @@ namespace CQRS.LightInject
 
             foreach (var commandHanderDescription in commandHanderDescriptions)
             {
-                serviceRegistry.RegisterScoped(commandHanderDescription.HandlerType, commandHanderDescription.ImplementingType);
+                if (commandHanderDescription.HandlerType.ContainsGenericParameters)
+                {
+                    // If we have an open generic handler type, we register this as the base interface
+                    // and let the generic argument mapper in LightInject handle this.
+                    serviceRegistry.RegisterScoped(typeof(ICommandHandler<>), commandHanderDescription.ImplementingType, commandHanderDescription.ImplementingType.FullName);
+                }
+                else
+                {
+                    serviceRegistry.RegisterScoped(commandHanderDescription.HandlerType, commandHanderDescription.ImplementingType);
+                }
             }
 
             serviceRegistry.RegisterScoped<ICommandHandlerFactory>(sp => new CommandHandlerFactory(sp));
@@ -64,7 +73,16 @@ namespace CQRS.LightInject
 
             foreach (var queryHandlerDescription in queryHandlerDescriptions)
             {
-                serviceRegistry.RegisterScoped(queryHandlerDescription.HandlerType, queryHandlerDescription.ImplementingType);
+                if (queryHandlerDescription.HandlerType.ContainsGenericParameters)
+                {
+                    // If we have an open generic handler type, we register this as the base interface
+                    // and let the generic argument mapper in LightInject handle this.
+                    serviceRegistry.RegisterScoped(typeof(IQueryHandler<,>), queryHandlerDescription.ImplementingType, queryHandlerDescription.ImplementingType.FullName);
+                }
+                else
+                {
+                    serviceRegistry.RegisterScoped(queryHandlerDescription.HandlerType, queryHandlerDescription.ImplementingType);
+                }
             }
 
             serviceRegistry.RegisterScoped<IQueryHandlerFactory>(sp => new QueryHandlerFactory(sp));

@@ -1,13 +1,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CQRS.Command.Abstractions;
-using CQRS.LightInject;
 using CQRS.Query.Abstractions;
 using FluentAssertions;
 using LightInject;
 using Xunit;
 
-namespace CQRS.Microsoft.Extensions.DependencyInjection.Tests
+namespace CQRS.LightInject.Tests
 {
     public class CommandExecutorTests
     {
@@ -58,6 +57,35 @@ namespace CQRS.Microsoft.Extensions.DependencyInjection.Tests
             container.RegisterCommandHandlers();
 
             container.AvailableServices.Count(sr => sr.ServiceType == typeof(ICommandExecutor)).Should().Be(1);
+        }
+
+        [Fact]
+        public async Task ShouldExecuteOpenGenericQueryHandler()
+        {
+            var container = new ServiceContainer();
+            container.RegisterQueryHandlers();
+            using (var scope = container.BeginScope())
+            {
+                var queryExecutor = scope.GetInstance<IQueryExecutor>();
+                var handler = container.GetInstance<IQueryHandler<OpenGenericQuery<Derived>, Derived>>();
+                var query = new OpenGenericQuery<Derived>();
+                var result = await queryExecutor.ExecuteAsync(query);
+                query.WasHandled.Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public async Task ShouldExecuteOpenGenericCommandHandler()
+        {
+            var container = new ServiceContainer();
+            container.RegisterCommandHandlers();
+            using (var scope = container.BeginScope())
+            {
+                var commandExecutor = scope.GetInstance<ICommandExecutor>();
+                var command = new DerivedCommand();
+                await commandExecutor.ExecuteAsync(command);
+                command.WasHandled.Should().BeTrue();
+            }
         }
     }
 }
