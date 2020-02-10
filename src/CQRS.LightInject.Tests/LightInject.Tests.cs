@@ -50,6 +50,58 @@ namespace CQRS.LightInject.Tests
         }
 
         [Fact]
+        public void ShouldBeSameInstanceQueryExecutor()
+        {
+            var container = new ServiceContainer();
+            container.RegisterQueryHandlers();
+            using (var scope = container.BeginScope())
+            {
+                var queryExecutor1 = scope.GetInstance<IQueryExecutor>();
+                var queryExecutor2 = scope.GetInstance<IQueryExecutor>();
+                Assert.Equal(queryExecutor1, queryExecutor2);
+            }
+        }
+
+        [Fact]
+        public void ShouldNotBeSameInstanceQueryExecutor()
+        {
+            var container = new ServiceContainer();
+            container.RegisterQueryHandlers(new PerRequestLifeTime());
+            using (var scope = container.BeginScope())
+            {
+                var queryExecutor1 = scope.GetInstance<IQueryExecutor>();
+                var queryExecutor2 = scope.GetInstance<IQueryExecutor>();
+                Assert.NotEqual(queryExecutor1, queryExecutor2);
+            }
+        }
+
+        [Fact]
+        public void ShouldBeSameInstanceQueryHandler()
+        {
+            var container = new ServiceContainer();
+            container.RegisterQueryHandlers();
+            using (var scope = container.BeginScope())
+            {
+                var queryHandler1 = scope.GetInstance<IQueryHandler<OpenGenericQuery<Derived>, Derived>>();
+                var queryHandler2 = scope.GetInstance<IQueryHandler<OpenGenericQuery<Derived>, Derived>>();
+                Assert.Equal(queryHandler1, queryHandler2);
+            }
+        }
+
+        [Fact]
+        public void ShouldNotBeSameInstanceQueryHandler()
+        {
+            var container = new ServiceContainer();
+            container.RegisterQueryHandlers(new PerRequestLifeTime());
+            using (var scope = container.BeginScope())
+            {
+                var queryHandler1 = scope.GetInstance<IQueryHandler<OpenGenericQuery<Derived>, Derived>>();
+                var queryHandler2 = scope.GetInstance<IQueryHandler<OpenGenericQuery<Derived>, Derived>>();
+                Assert.NotEqual(queryHandler1, queryHandler2);
+            }
+        }
+
+        [Fact]
         public void ShouldNotAddCommandExecutorTwice()
         {
             var container = new ServiceContainer();
@@ -85,6 +137,58 @@ namespace CQRS.LightInject.Tests
                 var command = new DerivedCommand();
                 await commandExecutor.ExecuteAsync(command);
                 command.WasHandled.Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public void ShouldBeSameInstanceCommandHandler()
+        {
+            var container = new ServiceContainer();
+            container.RegisterCommandHandlers();
+            using (var scope = container.BeginScope())
+            {
+                var handler1 = container.GetInstance<ICommandHandler<SampleCommand>>();
+                var handler2 = container.GetInstance<ICommandHandler<SampleCommand>>();
+                Assert.Equal(handler1, handler2);
+            }
+        }
+
+        [Fact]
+        public void ShouldNotBeSameInstanceCommandHandler()
+        {
+            var container = new ServiceContainer();
+            container.RegisterCommandHandlers(new PerRequestLifeTime());
+            using (var scope = container.BeginScope())
+            {
+                var handler1 = container.GetInstance<ICommandHandler<SampleCommand>>();
+                var handler2 = container.GetInstance<ICommandHandler<SampleCommand>>();
+                Assert.NotEqual(handler1, handler2);
+            }
+        }
+
+        [Fact]
+        public void ShouldBeSameInstanceCommandExecutor()
+        {
+            var container = new ServiceContainer();
+            container.RegisterCommandHandlers();
+            using (var scope = container.BeginScope())
+            {
+                var commandExecutor1 = scope.GetInstance<ICommandExecutor>();
+                var commandExecutor2 = scope.GetInstance<ICommandExecutor>();
+                Assert.Equal(commandExecutor1, commandExecutor2);
+            }
+        }
+
+        [Fact]
+        public void ShouldNotBeSameInstanceCommandExecutor()
+        {
+            var container = new ServiceContainer();
+            container.RegisterCommandHandlers(new PerRequestLifeTime());
+            using (var scope = container.BeginScope())
+            {
+                var commandExecutor1 = scope.GetInstance<ICommandExecutor>();
+                var commandExecutor2 = scope.GetInstance<ICommandExecutor>();
+                Assert.NotEqual(commandExecutor1, commandExecutor2);
             }
         }
     }
