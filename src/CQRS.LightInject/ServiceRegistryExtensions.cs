@@ -18,7 +18,7 @@ namespace CQRS.LightInject
         /// <returns><see cref="IServiceRegistry"/>.</returns>
         public static IServiceRegistry RegisterCommandHandlers(this IServiceRegistry serviceRegistry)
         {
-            return RegisterCommandHandlers(serviceRegistry, new PerScopeLifetime());
+            return RegisterCommandHandlers(serviceRegistry, Assembly.GetCallingAssembly());
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace CQRS.LightInject
         /// <returns><see cref="IServiceRegistry"/>.</returns>
         public static IServiceRegistry RegisterQueryHandlers(this IServiceRegistry serviceRegistry)
         {
-            return RegisterQueryHandlers(serviceRegistry, new PerScopeLifetime());
+            return RegisterQueryHandlers(serviceRegistry, Assembly.GetCallingAssembly());
         }
 
         /// <summary>
