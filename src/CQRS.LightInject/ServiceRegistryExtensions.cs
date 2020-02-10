@@ -25,7 +25,7 @@ namespace CQRS.LightInject
         /// Adds all command handlers found in the calling assembly to the <paramref name="serviceRegistry"/> as scoped services.
         /// </summary>
         /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
-        /// <param name="lifetime">Lifetime of <see cref="ICommandHandler{TCommand}"/></param>
+        /// <param name="lifetime">Lifetime of <see cref="ICommandHandler{TCommand}"/>.</param>
         /// <returns><see cref="IServiceRegistry"/>.</returns>
         public static IServiceRegistry RegisterCommandHandlers(this IServiceRegistry serviceRegistry, ILifetime lifetime)
         {
@@ -43,13 +43,12 @@ namespace CQRS.LightInject
             return RegisterCommandHandlers(serviceRegistry, assembly, new PerScopeLifetime());
         }
 
-
         /// <summary>
         /// Adds all command handlers found in the given <paramref name="assembly"/> to the <paramref name="serviceRegistry"/> as scoped services.
         /// </summary>
         /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
-        /// <param name="assembly">The assembly from which to add command handlers. </param>
-        /// <param name="lifetime">Lifetime of <see cref="ICommandHandler{TCommand}"/></param>
+        /// <param name="assembly">The assembly from which to add command handlers.</param>
+        /// <param name="lifetime">Lifetime of <see cref="ICommandHandler{TCommand}"/>.</param>
         /// <returns><see cref="IServiceRegistry"/>.</returns>
         public static IServiceRegistry RegisterCommandHandlers(this IServiceRegistry serviceRegistry, Assembly assembly, ILifetime lifetime)
         {
@@ -89,7 +88,7 @@ namespace CQRS.LightInject
         /// Adds all query handlers found in the calling assembly to the <paramref name="serviceRegistry"/> as scoped services.
         /// </summary>
         /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
-        /// <param name="lifetime">Lifetime of <see cref="IQueryHandler{TQuery,TResult}"/></param>
+        /// <param name="lifetime">Lifetime of <see cref="IQueryHandler{TQuery,TResult}"/>.</param>
         /// <returns><see cref="IServiceRegistry"/>.</returns>
         public static IServiceRegistry RegisterQueryHandlers(this IServiceRegistry serviceRegistry, ILifetime lifetime)
         {
@@ -112,7 +111,7 @@ namespace CQRS.LightInject
         /// </summary>
         /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
         /// <param name="assembly">The assembly from which to add query handlers. </param>
-        /// <param name="lifetime">Lifetime of <see cref="IQueryHandler{TQuery,TResult}"/></param>
+        /// <param name="lifetime">Lifetime of <see cref="IQueryHandler{TQuery,TResult}"/>.</param>
         /// <returns><see cref="IServiceRegistry"/>.</returns>
         public static IServiceRegistry RegisterQueryHandlers(this IServiceRegistry serviceRegistry, Assembly assembly, ILifetime lifetime)
         {
