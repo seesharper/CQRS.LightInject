@@ -18,7 +18,18 @@ namespace CQRS.LightInject
         /// <returns><see cref="IServiceRegistry"/>.</returns>
         public static IServiceRegistry RegisterCommandHandlers(this IServiceRegistry serviceRegistry)
         {
-            return RegisterCommandHandlers(serviceRegistry, Assembly.GetCallingAssembly());
+            return RegisterCommandHandlers(serviceRegistry, Assembly.GetCallingAssembly(), new PerScopeLifetime());
+        }
+
+        /// <summary>
+        /// Adds all command handlers found in the calling assembly to the <paramref name="serviceRegistry"/> as scoped services.
+        /// </summary>
+        /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
+        /// <param name="lifetime">Lifetime of <see cref="ICommandHandler{TCommand}"/></param>
+        /// <returns><see cref="IServiceRegistry"/>.</returns>
+        public static IServiceRegistry RegisterCommandHandlers(this IServiceRegistry serviceRegistry, ILifetime lifetime)
+        {
+            return RegisterCommandHandlers(serviceRegistry, Assembly.GetCallingAssembly(), lifetime);
         }
 
         /// <summary>
@@ -29,6 +40,19 @@ namespace CQRS.LightInject
         /// <returns><see cref="IServiceRegistry"/>.</returns>
         public static IServiceRegistry RegisterCommandHandlers(this IServiceRegistry serviceRegistry, Assembly assembly)
         {
+            return RegisterCommandHandlers(serviceRegistry, assembly, new PerScopeLifetime());
+        }
+
+
+        /// <summary>
+        /// Adds all command handlers found in the given <paramref name="assembly"/> to the <paramref name="serviceRegistry"/> as scoped services.
+        /// </summary>
+        /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
+        /// <param name="assembly">The assembly from which to add command handlers. </param>
+        /// <param name="lifetime">Lifetime of <see cref="ICommandHandler{TCommand}"/></param>
+        /// <returns><see cref="IServiceRegistry"/>.</returns>
+        public static IServiceRegistry RegisterCommandHandlers(this IServiceRegistry serviceRegistry, Assembly assembly, ILifetime lifetime)
+        {
             var commandHanderDescriptions = assembly.GetCommandHandlerDescriptors();
 
             foreach (var commandHanderDescription in commandHanderDescriptions)
@@ -37,16 +61,16 @@ namespace CQRS.LightInject
                 {
                     // If we have an open generic handler type, we register this as the base interface
                     // and let the generic argument mapper in LightInject handle this.
-                    serviceRegistry.RegisterScoped(typeof(ICommandHandler<>), commandHanderDescription.ImplementingType, commandHanderDescription.ImplementingType.FullName);
+                    serviceRegistry.Register(typeof(ICommandHandler<>), commandHanderDescription.ImplementingType, commandHanderDescription.ImplementingType.FullName, lifetime);
                 }
                 else
                 {
-                    serviceRegistry.RegisterScoped(commandHanderDescription.HandlerType, commandHanderDescription.ImplementingType);
+                    serviceRegistry.Register(commandHanderDescription.HandlerType, commandHanderDescription.ImplementingType, lifetime);
                 }
             }
 
-            serviceRegistry.RegisterScoped<ICommandHandlerFactory>(sp => new CommandHandlerFactory(sp));
-            serviceRegistry.RegisterScoped<ICommandExecutor, CommandExecutor>();
+            serviceRegistry.Register<ICommandHandlerFactory>(sp => new CommandHandlerFactory(sp), lifetime);
+            serviceRegistry.Register<ICommandExecutor, CommandExecutor>(lifetime);
 
             return serviceRegistry;
         }
@@ -58,7 +82,18 @@ namespace CQRS.LightInject
         /// <returns><see cref="IServiceRegistry"/>.</returns>
         public static IServiceRegistry RegisterQueryHandlers(this IServiceRegistry serviceRegistry)
         {
-            return RegisterQueryHandlers(serviceRegistry, Assembly.GetCallingAssembly());
+            return RegisterQueryHandlers(serviceRegistry, Assembly.GetCallingAssembly(), new PerScopeLifetime());
+        }
+
+        /// <summary>
+        /// Adds all query handlers found in the calling assembly to the <paramref name="serviceRegistry"/> as scoped services.
+        /// </summary>
+        /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
+        /// <param name="lifetime">Lifetime of <see cref="IQueryHandler{TQuery,TResult}"/></param>
+        /// <returns><see cref="IServiceRegistry"/>.</returns>
+        public static IServiceRegistry RegisterQueryHandlers(this IServiceRegistry serviceRegistry, ILifetime lifetime)
+        {
+            return RegisterQueryHandlers(serviceRegistry, Assembly.GetCallingAssembly(), lifetime);
         }
 
         /// <summary>
@@ -69,6 +104,18 @@ namespace CQRS.LightInject
         /// <returns><see cref="IServiceRegistry"/>.</returns>
         public static IServiceRegistry RegisterQueryHandlers(this IServiceRegistry serviceRegistry, Assembly assembly)
         {
+            return RegisterQueryHandlers(serviceRegistry, assembly, new PerScopeLifetime());
+        }
+
+        /// <summary>
+        /// Adds all query handlers found in the given <paramref name="assembly"/> to the <paramref name="serviceRegistry"/> as scoped services.
+        /// </summary>
+        /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
+        /// <param name="assembly">The assembly from which to add query handlers. </param>
+        /// <param name="lifetime">Lifetime of <see cref="IQueryHandler{TQuery,TResult}"/></param>
+        /// <returns><see cref="IServiceRegistry"/>.</returns>
+        public static IServiceRegistry RegisterQueryHandlers(this IServiceRegistry serviceRegistry, Assembly assembly, ILifetime lifetime)
+        {
             var queryHandlerDescriptions = assembly.GetQueryHandlerHandlerDescriptors();
 
             foreach (var queryHandlerDescription in queryHandlerDescriptions)
@@ -77,16 +124,16 @@ namespace CQRS.LightInject
                 {
                     // If we have an open generic handler type, we register this as the base interface
                     // and let the generic argument mapper in LightInject handle this.
-                    serviceRegistry.RegisterScoped(typeof(IQueryHandler<,>), queryHandlerDescription.ImplementingType, queryHandlerDescription.ImplementingType.FullName);
+                    serviceRegistry.Register(typeof(IQueryHandler<,>), queryHandlerDescription.ImplementingType, queryHandlerDescription.ImplementingType.FullName, lifetime);
                 }
                 else
                 {
-                    serviceRegistry.RegisterScoped(queryHandlerDescription.HandlerType, queryHandlerDescription.ImplementingType);
+                    serviceRegistry.Register(queryHandlerDescription.HandlerType, queryHandlerDescription.ImplementingType, lifetime);
                 }
             }
 
-            serviceRegistry.RegisterScoped<IQueryHandlerFactory>(sp => new QueryHandlerFactory(sp));
-            serviceRegistry.RegisterScoped<IQueryExecutor, QueryExecutor>();
+            serviceRegistry.Register<IQueryHandlerFactory>(sp => new QueryHandlerFactory(sp), lifetime);
+            serviceRegistry.Register<IQueryExecutor, QueryExecutor>(lifetime);
 
             return serviceRegistry;
         }
