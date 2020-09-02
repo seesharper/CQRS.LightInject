@@ -41,7 +41,7 @@ namespace CQRS.LightInject
                 }
                 else
                 {
-                    serviceRegistry.RegisterScoped(commandHanderDescription.HandlerType, commandHanderDescription.ImplementingType);
+                    serviceRegistry.RegisterScoped(commandHanderDescription.HandlerType, commandHanderDescription.ImplementingType, commandHanderDescription.ImplementingType.FullName);
                 }
             }
 
@@ -81,7 +81,7 @@ namespace CQRS.LightInject
                 }
                 else
                 {
-                    serviceRegistry.RegisterScoped(queryHandlerDescription.HandlerType, queryHandlerDescription.ImplementingType);
+                    serviceRegistry.RegisterScoped(queryHandlerDescription.HandlerType, queryHandlerDescription.ImplementingType, queryHandlerDescription.ImplementingType.FullName);
                 }
             }
 
