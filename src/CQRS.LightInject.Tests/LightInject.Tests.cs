@@ -14,6 +14,7 @@ namespace CQRS.LightInject.Tests
         public async Task ShouldExecuteCommandHandler()
         {
             var container = new ServiceContainer();
+            container.Register<IFoo, Foo>();
             container.RegisterCommandHandlers();
             using (var scope = container.BeginScope())
             {
@@ -29,6 +30,7 @@ namespace CQRS.LightInject.Tests
         {
             var container = new ServiceContainer();
             container.RegisterQueryHandlers();
+            container.Register<IFoo, Foo>();
             using (var scope = container.BeginScope())
             {
                 var queryExecutor = scope.GetInstance<IQueryExecutor>();
@@ -64,6 +66,7 @@ namespace CQRS.LightInject.Tests
         {
             var container = new ServiceContainer();
             container.RegisterQueryHandlers();
+            container.Register<IFoo, Foo>();
             using (var scope = container.BeginScope())
             {
                 var queryExecutor = scope.GetInstance<IQueryExecutor>();
@@ -79,6 +82,7 @@ namespace CQRS.LightInject.Tests
         {
             var container = new ServiceContainer();
             container.RegisterCommandHandlers();
+            container.Register<IFoo, Foo>();
             using (var scope = container.BeginScope())
             {
                 var commandExecutor = scope.GetInstance<ICommandExecutor>();
