@@ -6,6 +6,10 @@ namespace CQRS.LightInject.Tests
 {
     public class SampleQueryHandler : IQueryHandler<SampleQuery, SampleQueryResult>
     {
+        public SampleQueryHandler(IFoo foo)
+        {
+        }
+
         public Task<SampleQueryResult> HandleAsync(SampleQuery query, CancellationToken cancellationToken = default)
         {
             query.WasHandled = true;

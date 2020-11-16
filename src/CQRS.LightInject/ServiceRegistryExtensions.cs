@@ -1,6 +1,10 @@
 namespace CQRS.LightInject
 {
+    using System;
+    using System.Linq;
     using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
     using CQRS.Command.Abstractions;
     using CQRS.Execution;
     using CQRS.Query.Abstractions;
@@ -57,9 +61,7 @@ namespace CQRS.LightInject
         /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
         /// <returns><see cref="IServiceRegistry"/>.</returns>
         public static IServiceRegistry RegisterQueryHandlers(this IServiceRegistry serviceRegistry)
-        {
-            return RegisterQueryHandlers(serviceRegistry, Assembly.GetCallingAssembly());
-        }
+            => RegisterQueryHandlers(serviceRegistry, Assembly.GetCallingAssembly());
 
         /// <summary>
         /// Adds all query handlers found in the given <paramref name="assembly"/> to the <paramref name="serviceRegistry"/> as scoped services.
@@ -89,6 +91,66 @@ namespace CQRS.LightInject
             serviceRegistry.RegisterScoped<IQueryExecutor, QueryExecutor>();
 
             return serviceRegistry;
+        }
+
+        /// <summary>
+        /// Registers an function-based `ICommandHandler{TCommand}` decorator used to intercept command handlers.
+        /// </summary>
+        /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
+        /// <param name="implementation">A function representing the implementation of this handler.</param>
+        /// <typeparam name="TCommand">The type of command being handeled.</typeparam>
+        /// <returns><see cref="IServiceRegistry"/>.</returns>
+        public static IServiceRegistry RegisterCommandInterceptor<TCommand>(this IServiceRegistry serviceRegistry, Func<TCommand, ICommandHandler<TCommand>, CancellationToken, Task> implementation)
+            => serviceRegistry.Decorate<ICommandHandler<TCommand>>((factory, handler) => new InterceptingCommandHandler<TCommand>(handler, implementation));
+
+        /// <summary>
+        /// Registers an function-based `ICommandHandler{TCommand}` decorator used to intercept command handlers.
+        /// </summary>
+        /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
+        /// <param name="implementation">A function representing the implementation of this handler.</param>
+        /// <typeparam name="TCommand">The type of command being handeled.</typeparam>
+        /// <typeparam name="TDependency">The dependency beging passed to the <paramref name="implementation"/> function.</typeparam>
+        /// <returns><see cref="IServiceRegistry"/>.</returns>
+        public static IServiceRegistry RegisterCommandInterceptor<TCommand, TDependency>(this IServiceRegistry serviceRegistry, Func<TCommand, ICommandHandler<TCommand>, TDependency, CancellationToken, Task> implementation)
+        {
+            if (!serviceRegistry.AvailableServices.Any(sr => sr.ServiceType == typeof(TDependency)))
+            {
+                serviceRegistry.Register<TDependency>();
+            }
+
+            return serviceRegistry.Decorate<ICommandHandler<TCommand>>((factory, handler) => new InterceptingCommandHandler<TCommand, TDependency>(handler, factory.GetInstance<TDependency>(), implementation));
+        }
+
+        /// <summary>
+        /// Registers an function-based `IQueryHandler{TQuery, TResult}` decorator used to intercept query handlers.
+        /// </summary>
+        /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
+        /// <param name="implementation">A function representing the implementation of this handler.</param>
+        /// <typeparam name="TQuery">The type of query being handeled.</typeparam>
+        /// <typeparam name="TResult">The type of result to be returned.</typeparam>
+        /// <returns><see cref="IServiceRegistry"/>.</returns>
+        public static IServiceRegistry RegisterQueryInterceptor<TQuery, TResult>(this IServiceRegistry serviceRegistry, Func<TQuery, IQueryHandler<TQuery, TResult>, CancellationToken, Task<TResult>> implementation)
+            where TQuery : IQuery<TResult>
+            => serviceRegistry.Decorate<IQueryHandler<TQuery, TResult>>((factory, handler) => new InterceptingQueryHandler<TQuery, TResult>(handler, implementation));
+
+        /// <summary>
+        /// Registers an function-based `IQueryHandler{TQuery, TResult}` decorator used to intercept query handlers.
+        /// </summary>
+        /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
+        /// <param name="implementation">A function representing the implementation of this handler.</param>
+        /// <typeparam name="TQuery">The type of query being handeled.</typeparam>
+        /// <typeparam name="TResult">The type of result to be returned.</typeparam>
+        /// <typeparam name="TDependency">The dependency beging passed to the <paramref name="implementation"/> function.</typeparam>
+        /// <returns><see cref="IServiceRegistry"/>.</returns>
+        public static IServiceRegistry RegisterQueryInterceptor<TQuery, TResult, TDependency>(this IServiceRegistry serviceRegistry, Func<TQuery, IQueryHandler<TQuery, TResult>, TDependency, CancellationToken, Task<TResult>> implementation)
+           where TQuery : IQuery<TResult>
+        {
+            if (!serviceRegistry.AvailableServices.Any(sr => sr.ServiceType == typeof(TDependency)))
+            {
+                serviceRegistry.Register<TDependency>();
+            }
+
+            return serviceRegistry.Decorate<IQueryHandler<TQuery, TResult>>((factory, handler) => new InterceptingQueryHandler<TQuery, TResult, TDependency>(handler, factory.GetInstance<TDependency>(), implementation));
         }
     }
 }

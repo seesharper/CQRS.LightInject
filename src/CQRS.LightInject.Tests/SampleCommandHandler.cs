@@ -6,6 +6,10 @@ namespace CQRS.LightInject.Tests
 {
     public class SampleCommandHandler : ICommandHandler<SampleCommand>
     {
+        public SampleCommandHandler(IFoo foo)
+        {
+        }
+
         public Task HandleAsync(SampleCommand command, CancellationToken cancellationToken = default)
         {
             command.WasHandled = true;
