@@ -45,7 +45,7 @@ public class CustomersController
 
 ## Intercepting handlers
 
-By intercepting handlers we mean that we can provide a function to be executed as part of the execution chain.
+By intercepting handlers we mean that we can provide a function to be executed as part of the handler execution chain.
 
 ```c#
 container.RegisterCommandInterceptor<SampleCommand>(async (command, handler, token) =>
