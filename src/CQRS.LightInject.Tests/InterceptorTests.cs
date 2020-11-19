@@ -99,10 +99,10 @@ namespace CQRS.LightInject.Tests
             container.Register<IFoo, Foo>();
             bool invoked = false;
 
-            container.RegisterQueryInterceptor<SampleQuery, SampleQueryResult>(async (command, handler, token) =>
+            container.RegisterQueryInterceptor<SampleQuery, SampleQueryResult>(async (query, handler, token) =>
             {
                 invoked = true;
-                return await handler.HandleAsync(command, token);
+                return await handler.HandleAsync(query, token);
             }
             );
 
@@ -124,11 +124,11 @@ namespace CQRS.LightInject.Tests
             bool invoked = false;
             IFoo passedFoo = null;
 
-            container.RegisterQueryInterceptor<SampleQuery, SampleQueryResult, IFoo>(async (command, handler, foo, token) =>
+            container.RegisterQueryInterceptor<SampleQuery, SampleQueryResult, IFoo>(async (query, handler, foo, token) =>
             {
                 passedFoo = foo;
                 invoked = true;
-                return await handler.HandleAsync(command, token);
+                return await handler.HandleAsync(query, token);
             }
             );
 
@@ -153,12 +153,12 @@ namespace CQRS.LightInject.Tests
             IFoo passedFoo = null;
             IBar passedBar = null;
 
-            container.RegisterQueryInterceptor<SampleQuery, SampleQueryResult, (IFoo foo, IBar bar)>(async (command, handler, dependencies, token) =>
+            container.RegisterQueryInterceptor<SampleQuery, SampleQueryResult, (IFoo foo, IBar bar)>(async (query, handler, dependencies, token) =>
             {
                 passedFoo = dependencies.foo;
                 passedBar = dependencies.bar;
                 invoked = true;
-                return await handler.HandleAsync(command, token);
+                return await handler.HandleAsync(query, token);
             }
             );
 
@@ -171,6 +171,30 @@ namespace CQRS.LightInject.Tests
                 passedFoo.Should().BeOfType<Foo>();
                 passedBar.Should().BeOfType<Bar>();
             }
+        }
+
+        [Fact]
+        public void ShouldNotRegisterAbstractTypesForQueryInterceptors()
+        {
+            var container = new ServiceContainer();
+            container.RegisterQueryInterceptor<SampleQuery, SampleQueryResult, IFoo>(async (query, handler, dependency, token) =>
+            {
+                return await handler.HandleAsync(query, token);
+            });
+
+            container.AvailableServices.Should().NotContain(sr => sr.ServiceType == typeof(IFoo));
+        }
+
+        [Fact]
+        public void ShouldNotRegisterAbstractTypesForCommandnterceptors()
+        {
+            var container = new ServiceContainer();
+            container.RegisterCommandInterceptor<SampleCommand, IFoo>(async (command, handler, dependency, token) =>
+            {
+
+            });
+
+            container.AvailableServices.Should().NotContain(sr => sr.ServiceType == typeof(IFoo));
         }
     }
 }

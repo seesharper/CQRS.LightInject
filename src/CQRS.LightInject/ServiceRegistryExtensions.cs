@@ -1,7 +1,6 @@
 namespace CQRS.LightInject
 {
     using System;
-    using System.Linq;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
@@ -113,7 +112,7 @@ namespace CQRS.LightInject
         /// <returns><see cref="IServiceRegistry"/>.</returns>
         public static IServiceRegistry RegisterCommandInterceptor<TCommand, TDependency>(this IServiceRegistry serviceRegistry, Func<TCommand, ICommandHandler<TCommand>, TDependency, CancellationToken, Task> implementation)
         {
-            if (!serviceRegistry.AvailableServices.Any(sr => sr.ServiceType == typeof(TDependency)))
+            if (!typeof(TDependency).IsAbstract)
             {
                 serviceRegistry.Register<TDependency>();
             }
@@ -145,7 +144,7 @@ namespace CQRS.LightInject
         public static IServiceRegistry RegisterQueryInterceptor<TQuery, TResult, TDependency>(this IServiceRegistry serviceRegistry, Func<TQuery, IQueryHandler<TQuery, TResult>, TDependency, CancellationToken, Task<TResult>> implementation)
            where TQuery : IQuery<TResult>
         {
-            if (!serviceRegistry.AvailableServices.Any(sr => sr.ServiceType == typeof(TDependency)))
+            if (!typeof(TDependency).IsAbstract)
             {
                 serviceRegistry.Register<TDependency>();
             }
