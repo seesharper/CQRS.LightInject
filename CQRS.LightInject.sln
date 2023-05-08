@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRS.LightInject", "CQRS.LightInject\CQRS.LightInject.csproj", "{3818EF59-0390-48C1-B769-AA1EDAB51876}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRS.LightInject", "src/CQRS.LightInject/CQRS.LightInject.csproj", "{3818EF59-0390-48C1-B769-AA1EDAB51876}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRS.LightInject.Tests", "CQRS.LightInject.Tests\CQRS.LightInject.Tests.csproj", "{98E48CFF-7232-41E1-8AA5-252B4E617669}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRS.LightInject.Tests", "src/CQRS.LightInject.Tests/CQRS.LightInject.Tests.csproj", "{98E48CFF-7232-41E1-8AA5-252B4E617669}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

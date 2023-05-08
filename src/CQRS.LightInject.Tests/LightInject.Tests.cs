@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CQRS.Command.Abstractions;
+using CQRS.Execution.Tests;
 using CQRS.Query.Abstractions;
 using FluentAssertions;
 using LightInject;
@@ -89,6 +90,24 @@ namespace CQRS.LightInject.Tests
                 var command = new DerivedCommand();
                 await commandExecutor.ExecuteAsync(command);
                 command.WasHandled.Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public async Task ShouldExecuteCommandHandlerWithOpenGenericCommand()
+        {
+            var container = new ServiceContainer();
+            container.RegisterCommandHandlers();
+            container.Register<IFoo, Foo>();
+            using (var scope = container.BeginScope())
+            {
+                var commandExecutor = scope.GetInstance<ICommandExecutor>();
+                var sampleCommand = new SampleOpenGenericCommand<string>();
+                await commandExecutor.ExecuteAsync(sampleCommand);
+                sampleCommand.WasHandled.Should().BeTrue();
+                var anotherSampleCommand = new AnotherSampleOpenGenericCommand<string>();
+                await commandExecutor.ExecuteAsync(anotherSampleCommand);
+                anotherSampleCommand.WasHandled.Should().BeTrue();
             }
         }
     }

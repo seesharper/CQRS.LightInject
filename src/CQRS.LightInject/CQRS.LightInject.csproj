@@ -18,7 +18,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CQRS.Execution" Version="1.0.1" />
-    <PackageReference Include="LightInject" Version="6.4.0" />
+    <PackageReference Include="LightInject" Version="6.6.4" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
