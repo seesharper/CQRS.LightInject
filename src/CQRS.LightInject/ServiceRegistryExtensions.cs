@@ -32,19 +32,20 @@ namespace CQRS.LightInject
         /// <returns><see cref="IServiceRegistry"/>.</returns>
         public static IServiceRegistry RegisterCommandHandlers(this IServiceRegistry serviceRegistry, Assembly assembly)
         {
-            var commandHanderDescriptions = assembly.GetCommandHandlerDescriptors();
+            var commandHandlerDescriptions = assembly.GetCommandHandlerDescriptors();
 
-            foreach (var commandHanderDescription in commandHanderDescriptions)
+            foreach (var commandHandlerDescription in commandHandlerDescriptions)
             {
-                if (commandHanderDescription.HandlerType.ContainsGenericParameters)
+                if (commandHandlerDescription.HandlerType.ContainsGenericParameters)
                 {
                     // If we have an open generic handler type, we register this as the base interface
                     // and let the generic argument mapper in LightInject handle this.
-                    serviceRegistry.RegisterScoped(typeof(ICommandHandler<>), commandHanderDescription.ImplementingType, commandHanderDescription.ImplementingType.FullName);
+                    serviceRegistry.RegisterScoped(typeof(ICommandHandler<>), commandHandlerDescription.ImplementingType, commandHandlerDescription.ImplementingType.FullName);
                 }
                 else
                 {
-                    serviceRegistry.RegisterScoped(commandHanderDescription.HandlerType, commandHanderDescription.ImplementingType, commandHanderDescription.ImplementingType.FullName);
+                    serviceRegistry.RegisterScoped(commandHandlerDescription.HandlerType, commandHandlerDescription.ImplementingType);
+                    // serviceRegistry.RegisterScoped(commandHandlerDescription.HandlerType, commandHandlerDescription.ImplementingType, commandHandlerDescription.ImplementingType.FullName);
                 }
             }
 
@@ -83,6 +84,7 @@ namespace CQRS.LightInject
                 else
                 {
                     serviceRegistry.RegisterScoped(queryHandlerDescription.HandlerType, queryHandlerDescription.ImplementingType, queryHandlerDescription.ImplementingType.FullName);
+                    serviceRegistry.RegisterScoped(queryHandlerDescription.HandlerType, queryHandlerDescription.ImplementingType);
                 }
             }
 
