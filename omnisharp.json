@@ -5,7 +5,7 @@
   },
   "RoslynExtensionsOptions": {
     "EnableAnalyzersSupport": true,
-    "EnableDecompilationSupport": true
+    "EnableDecompilationSupport": true,
   },
   "script": {
     "enableScriptNuGetReferences": true,

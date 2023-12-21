@@ -50,7 +50,8 @@ namespace CQRS.LightInject
 
             serviceRegistry.RegisterScoped<ICommandHandlerFactory>(sp => new CommandHandlerFactory(sp));
             serviceRegistry.RegisterScoped<ICommandExecutor, CommandExecutor>();
-
+            serviceRegistry.RegisterScoped(typeof(ICommandHandler<>), typeof(ScopedCommandHandler<>));
+            serviceRegistry.RegisterScoped<ICommandHandlerScopeFactory>(sf => new CommandHandlerScopeFactory(sf));
             return serviceRegistry;
         }
 
@@ -88,7 +89,8 @@ namespace CQRS.LightInject
 
             serviceRegistry.RegisterScoped<IQueryHandlerFactory>(sp => new QueryHandlerFactory(sp));
             serviceRegistry.RegisterScoped<IQueryExecutor, QueryExecutor>();
-
+            serviceRegistry.RegisterScoped(typeof(IQueryHandler<,>), typeof(ScopedQueryHandler<,>));
+            serviceRegistry.RegisterScoped<IQueryHandlerScopeFactory>(sf => new QueryHandlerScopeFactory(sf));
             return serviceRegistry;
         }
 
