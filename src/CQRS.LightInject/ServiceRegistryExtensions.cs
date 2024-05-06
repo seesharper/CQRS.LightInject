@@ -2,6 +2,7 @@ namespace CQRS.LightInject
 {
     using System;
     using System.Reflection;
+    using System.Runtime.CompilerServices;
     using System.Threading;
     using System.Threading.Tasks;
     using CQRS.Command.Abstractions;
@@ -19,10 +20,9 @@ namespace CQRS.LightInject
         /// </summary>
         /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
         /// <returns><see cref="IServiceRegistry"/>.</returns>
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static IServiceRegistry RegisterCommandHandlers(this IServiceRegistry serviceRegistry)
-        {
-            return RegisterCommandHandlers(serviceRegistry, Assembly.GetCallingAssembly());
-        }
+            => RegisterCommandHandlers(serviceRegistry, Assembly.GetCallingAssembly());
 
         /// <summary>
         /// Adds all command handlers found in the given <paramref name="assembly"/> to the <paramref name="serviceRegistry"/> as scoped services.
@@ -60,6 +60,7 @@ namespace CQRS.LightInject
         /// </summary>
         /// <param name="serviceRegistry">The target <see cref="IServiceRegistry"/>.</param>
         /// <returns><see cref="IServiceRegistry"/>.</returns>
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static IServiceRegistry RegisterQueryHandlers(this IServiceRegistry serviceRegistry)
             => RegisterQueryHandlers(serviceRegistry, Assembly.GetCallingAssembly());
 
