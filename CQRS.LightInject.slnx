@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CQRS.LightInject.Tests/CQRS.LightInject.Tests.csproj" />
+    <Project Path="src/CQRS.LightInject/CQRS.LightInject.csproj" />
+  </Folder>
+</Solution>

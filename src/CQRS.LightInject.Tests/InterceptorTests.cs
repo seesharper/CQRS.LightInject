@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
+using AwesomeAssertions;
 using CQRS.Command.Abstractions;
 using CQRS.Query.Abstractions;
-using FluentAssertions;
 using LightInject;
 using Xunit;
 

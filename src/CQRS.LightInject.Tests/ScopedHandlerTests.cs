@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using CQRS.Command.Abstractions;
 using CQRS.Execution;
 using CQRS.Query.Abstractions;
-using FluentAssertions;
+using AwesomeAssertions;
 using LightInject;
 using Xunit;
 
