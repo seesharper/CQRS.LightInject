@@ -5,10 +5,10 @@
   },
   "RoslynExtensionsOptions": {
     "EnableAnalyzersSupport": true,
-    "EnableDecompilationSupport": true,
+    "EnableDecompilationSupport": true
   },
   "script": {
     "enableScriptNuGetReferences": true,
-    "defaultTargetFramework": "net7.0"
+    "defaultTargetFramework": "net10.0"
   }
 }

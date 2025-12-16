@@ -16,7 +16,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CQRS.Execution" Version="1.2.0" />
-    <PackageReference Include="LightInject" Version="6.6.4" />
+    <PackageReference Include="CQRS.Execution" Version="1.2.1" />
+    <PackageReference Include="LightInject" Version="7.0.1" />
   </ItemGroup>
 </Project>
