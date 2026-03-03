@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CQRS.Execution;
 using LightInject;
 
@@ -17,6 +18,6 @@ namespace CQRS.LightInject
         public CommandHandlerScopeFactory(IServiceFactory factory) => _factory = factory;
 
         /// <inheritdoc/>
-        public ICommandHandlerScope CreateScope() => new CommandHandlerScope(_factory.BeginScope());
+        public ValueTask<ICommandHandlerScope> CreateScopeAsync() => new ValueTask<ICommandHandlerScope>(new CommandHandlerScope(_factory.BeginScope()));
     }
 }
