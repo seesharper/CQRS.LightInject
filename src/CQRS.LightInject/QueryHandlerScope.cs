@@ -22,9 +22,6 @@ namespace CQRS.LightInject
         public IQueryExecutor CreateQueryExecutor() => _scope.GetInstance<IQueryExecutor>();
 
         /// <inheritdoc/>
-        public void Dispose() => _scope.Dispose();
-
-        /// <inheritdoc/>
         public ValueTask DisposeAsync() => _scope.DisposeAsync();
     }
 }

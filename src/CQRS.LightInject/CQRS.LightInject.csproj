@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Packable>true</Packable>
     <Authors>Bernhard Richter</Authors>
     <Description>Enables command handlers and query handlers to be registered using LightInject.</Description>
@@ -16,7 +16,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CQRS.Execution" Version="1.2.1" />
+    <PackageReference Include="CQRS.Execution" Version="2.0.0" />
     <PackageReference Include="LightInject" Version="7.0.1" />
   </ItemGroup>
 </Project>

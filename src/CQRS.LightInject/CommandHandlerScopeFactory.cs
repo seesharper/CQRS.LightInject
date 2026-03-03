@@ -18,6 +18,11 @@ namespace CQRS.LightInject
         public CommandHandlerScopeFactory(IServiceFactory factory) => _factory = factory;
 
         /// <inheritdoc/>
-        public ValueTask<ICommandHandlerScope> CreateScopeAsync() => new ValueTask<ICommandHandlerScope>(new CommandHandlerScope(_factory.BeginScope()));
+        public ValueTask<ICommandHandlerScope> CreateScopeAsync()
+        {
+            
+            _factory.BeginScope();
+            return new ValueTask<ICommandHandlerScope>(new CommandHandlerScope(_factory.BeginScope()));
+        }
     }
 }
