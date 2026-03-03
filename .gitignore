@@ -18,6 +18,7 @@ local.properties
 Artifacts
 BenchmarkDotNet.Artifacts
 CoverageResult
+coverage/
 *.exe
 .DS_Store
 dotnet-script-tool/
