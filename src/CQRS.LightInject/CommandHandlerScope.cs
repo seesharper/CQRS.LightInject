@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CQRS.Command.Abstractions;
 using CQRS.Execution;
 using LightInject;
@@ -21,6 +22,6 @@ namespace CQRS.LightInject
         public ICommandExecutor CreateCommandExecutor() => _scope.GetInstance<ICommandExecutor>();
 
         /// <inheritdoc/>
-        public void Dispose() => _scope.Dispose();
+        public ValueTask DisposeAsync() => _scope.DisposeAsync();
     }
 }
