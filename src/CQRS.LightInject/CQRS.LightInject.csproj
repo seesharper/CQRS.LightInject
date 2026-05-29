@@ -17,6 +17,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CQRS.Execution" Version="2.0.0" />
-    <PackageReference Include="LightInject" Version="7.0.1" />
+    <PackageReference Include="LightInject" Version="7.1.0" />
   </ItemGroup>
 </Project>
